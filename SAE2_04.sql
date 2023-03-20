@@ -1,6 +1,23 @@
 -- TP 2_04
--- Nom:  , Prenom: 
+-- Nom: RAVIART, Prenom: Alexandre
 
+-- +----------------------+--
+-- * Question Objet Volé : --
+-- +----------------------+--
+
+CREATE OR REPLACE VIEW DebutDuMois AS 
+SELECT idob, idve, dateheure, montant FROM OBJET natural
+join UTILISATEUR natural join VENTE where DAY(debutve) < 15;
+
+SELECT idut, idob, idve, debutve, max(prixbase) prixmax, 
+min(prixbase) prixmin FROM OBJET natural
+join VENTE natural join UTILISATEUR 
+where DAY(debutve) < 15 group by idve having max(prixbase) >= min(prixbase)*10;
+
+-- requete a finir
+SELECT idut, idob, idve, debutve, max(montant) prixmax, 
+min(montant) prixmin FROM VENTE natural join UTILISATEUR natural join ENCHERIR
+where DAY(debutve) < 15 group by idve having max(prixbase) >= min(prixbase)*10;
 -- +------------------+--
 -- * Question 1 :     --
 -- +------------------+--
@@ -13,9 +30,9 @@
 -- | pseudout | nomob                |
 -- +----------+----------------------+
 -- | etc...
--- = Reponse question 1.
 
-
+SELECT pseudout from  UTILISATEUR natural join OBJET where idob
+IN (SELECT )
 
 -- +------------------+--
 -- * Question 2 :     --
