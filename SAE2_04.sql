@@ -2,28 +2,30 @@
 -- Nom: RAVIART, Prenom: Alexandre
 
 -- +----------------------+--
--- * Question Objet Volé : --
+-- * Question OBJET Volé : --
 -- +----------------------+--
 
 -- requete a finir
-SELECT idut, idob, idve, debutve, max(montant) prixmax, 
-min(montant) prixmin FROM VENTE natural join UTILISATEUR natural join ENCHERIR
-where DAY(debutve) < 15 group by idve having max(prixbase) >= min(prixbase)*10;
 
-SELECT objet.nomob, vente.prixbase, MAX(encherir.montant) montant_max, COUNT(DISTINCT encherir.idut) nb_acheteurs
-FROM objet
-JOIN vente ON objet.idob = vente.idob
-JOIN encherir ON vente.idve = encherir.idve where DAY(debutve) < 15 and vente.prixbase < 500
-GROUP BY objet.idob, vente.prixbase HAVING MAX(encherir.montant) > vente.prixbase * 10 and nb_acheteurs >= 10;
 
-SELECT nomob, prixbase, MAX(montant) montant_max, COUNT(DISTINCT idut) nb_acheteurs
-FROM objet natural join vente natural join encherir where DAY(debutve) < 15 and vente.prixbase < 500
-GROUP BY objet.idob, vente.prixbase HAVING MAX(encherir.montant) > vente.prixbase * 10 and nb_acheteurs >= 10;
+SELECT OBJET.idut, OBJET.nomob, VENTE.prixbase, MAX(ENCHERIR.montant) montant_max
+FROM OBJET
+JOIN VENTE ON OBJET.idob = VENTE.idob
+JOIN ENCHERIR ON VENTE.idve = ENCHERIR.idve where DAY(debutve) < 15 and VENTE.prixbase < 500
+GROUP BY OBJET.idob, VENTE.prixbase HAVING MAX(ENCHERIR.montant) > VENTE.prixbase * 10;
+
+SELECT ENCHERIR.idut, OBJET.nomob, VENTE.prixbase, ENCHERIR.montant
+FROM OBJET
+JOIN VENTE ON 
+OBJET.idob = VENTE.idob
+JOIN ENCHERIR 
+ON VENTE.idve = ENCHERIR.idve where DAY(debutve) < 15 and VENTE.prixbase < 500 and montant > prixbase * 10
+GROUP BY OBJET.idob, VENTE.prixbase;
 -- +------------------+--
 -- * Question 1 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
---  La liste des objets vendus par ght1ordi au mois de février 2023
+--  La liste des OBJETs vendus par ght1ordi au mois de février 2023
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -32,14 +34,11 @@ GROUP BY objet.idob, vente.prixbase HAVING MAX(encherir.montant) > vente.prixbas
 -- +----------+----------------------+
 -- | etc...
 
-SELECT pseudout from  UTILISATEUR natural join OBJET where idob
-IN (SELECT )
-
 -- +------------------+--
 -- * Question 2 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
---  La liste des utilisateurs qui ont enchérit sur un objet qu’ils ont eux même mis en vente
+--  La liste des utilisateurs qui ont enchérit sur un OBJET qu’ils ont eux même mis en VENTE
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -55,7 +54,7 @@ IN (SELECT )
 -- * Question 3 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
---  La liste des utilisateurs qui ont mis en vente des objets mais uniquement des meubles
+--  La liste des utilisateurs qui ont mis en VENTE des OBJETs mais uniquement des meubles
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -71,7 +70,7 @@ IN (SELECT )
 -- * Question 4 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
---  La liste des objets qui ont généré plus de 15 enchères en 2022
+--  La liste des OBJETs qui ont généré plus de 15 enchères en 2022
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -87,7 +86,7 @@ IN (SELECT )
 -- * Question 5 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
---  Ici NE CREEZ PAS la vue PRIXVENTE mais indiquer simplement la requête qui lui est associée. C'est à dire la requête permettant d'obtenir pour chaque vente validée, l'identifiant de la vente l'identiant de l'acheteur et le prix de la vente.
+--  Ici NE CREEZ PAS la vue PRIXVENTE mais indiquer simplement la requête qui lui est associée. C'est à dire la requête permettant d'obtenir pour chaque VENTE validée, l'identifiant de la VENTE l'identiant de l'acheteur et le prix de la VENTE.
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -119,7 +118,7 @@ IN (SELECT )
 -- * Question 7 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
---  Les informations du ou des utilisateurs qui ont mis le plus d’objets en vente
+--  Les informations du ou des utilisateurs qui ont mis le plus d’OBJETs en VENTE
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -140,7 +139,7 @@ IN (SELECT )
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
 -- +-------+-------------------+-----------+
--- | idcat | nomcat            | nb_objets |
+-- | idcat | nomcat            | nb_OBJETs |
 -- +-------+-------------------+-----------+
 -- | etc...
 -- = Reponse question 8.
