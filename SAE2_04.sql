@@ -5,19 +5,20 @@
 -- * Question Objet Volé : --
 -- +----------------------+--
 
-CREATE OR REPLACE VIEW DebutDuMois AS 
-SELECT idob, idve, dateheure, montant FROM OBJET natural
-join UTILISATEUR natural join VENTE where DAY(debutve) < 15;
-
-SELECT idut, idob, idve, debutve, max(prixbase) prixmax, 
-min(prixbase) prixmin FROM OBJET natural
-join VENTE natural join UTILISATEUR 
-where DAY(debutve) < 15 group by idve having max(prixbase) >= min(prixbase)*10;
-
 -- requete a finir
 SELECT idut, idob, idve, debutve, max(montant) prixmax, 
 min(montant) prixmin FROM VENTE natural join UTILISATEUR natural join ENCHERIR
 where DAY(debutve) < 15 group by idve having max(prixbase) >= min(prixbase)*10;
+
+SELECT objet.nomob, vente.prixbase, MAX(encherir.montant) montant_max, COUNT(DISTINCT encherir.idut) nb_acheteurs
+FROM objet
+JOIN vente ON objet.idob = vente.idob
+JOIN encherir ON vente.idve = encherir.idve where DAY(debutve) < 15 and vente.prixbase < 500
+GROUP BY objet.idob, vente.prixbase HAVING MAX(encherir.montant) > vente.prixbase * 10 and nb_acheteurs >= 10;
+
+SELECT nomob, prixbase, MAX(montant) montant_max, COUNT(DISTINCT idut) nb_acheteurs
+FROM objet natural join vente natural join encherir where DAY(debutve) < 15 and vente.prixbase < 500
+GROUP BY objet.idob, vente.prixbase HAVING MAX(encherir.montant) > vente.prixbase * 10 and nb_acheteurs >= 10;
 -- +------------------+--
 -- * Question 1 :     --
 -- +------------------+--
