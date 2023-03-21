@@ -14,12 +14,14 @@ JOIN VENTE ON OBJET.idob = VENTE.idob
 JOIN ENCHERIR ON VENTE.idve = ENCHERIR.idve where DAY(debutve) < 15 and VENTE.prixbase < 500
 GROUP BY OBJET.idob, VENTE.prixbase HAVING MAX(ENCHERIR.montant) > VENTE.prixbase * 10;
 
-SELECT ENCHERIR.idut, OBJET.nomob, VENTE.prixbase, ENCHERIR.montant
+SELECT ENCHERIR.idut, UTILISATEUR.pseudout, OBJET.nomob, VENTE.prixbase, ENCHERIR.montant
 FROM OBJET
 JOIN VENTE ON 
 OBJET.idob = VENTE.idob
 JOIN ENCHERIR 
-ON VENTE.idve = ENCHERIR.idve where DAY(debutve) < 15 and VENTE.prixbase < 500 and montant > prixbase * 10
+ON VENTE.idve = ENCHERIR.idve
+JOIN UTILISATEUR ON ENCHERIR.idut = UTILISATEUR.idut
+where DAY(debutve) < 15 and VENTE.prixbase < 500 and montant > prixbase * 10
 GROUP BY OBJET.idob, VENTE.prixbase;
 -- +------------------+--
 -- * Question 1 :     --
@@ -33,6 +35,10 @@ GROUP BY OBJET.idob, VENTE.prixbase;
 -- | pseudout | nomob                |
 -- +----------+----------------------+
 -- | etc...
+
+SELECT pseudout; nomob FROM OBJET NATURAL JOIN UTILISATEUR 
+NATURAL join VENTE where idst = '4' and pseudout = "ght1ordi" 
+and MONTH(debutVe) = 2 and YEAR(debutVe) = 2023;
 
 -- +------------------+--
 -- * Question 2 :     --
@@ -48,6 +54,9 @@ GROUP BY OBJET.idob, VENTE.prixbase;
 -- | etc...
 -- = Reponse question 2.
 
+-- a revoir
+SELECT pseudout FROM OBJET NATURAL JOIN UTILISATEUR c1
+NATURAL join VENTE where idut in (select idut from ENCHERIR NATURAL join VENTE);
 
 
 -- +------------------+--
@@ -64,6 +73,9 @@ GROUP BY OBJET.idob, VENTE.prixbase;
 -- | etc...
 -- = Reponse question 3.
 
+SELECT pseudout FROM OBJET NATURAL JOIN UTILISATEUR 
+NATURAL join VENTE where idob NOT IN(select idob FROM OBJET
+NATURAL join VENTE where idcat != 3);
 
 
 -- +------------------+--
@@ -80,7 +92,7 @@ GROUP BY OBJET.idob, VENTE.prixbase;
 -- | etc...
 -- = Reponse question 4.
 
-
+select idob, nomob, count(idob) from OBJET NATURAL join ENCHERIR GROUP by idob having count(idob) > 9;
 
 -- +------------------+--
 -- * Question 5 :     --
