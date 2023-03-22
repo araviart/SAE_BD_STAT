@@ -125,6 +125,9 @@ YEAR(dateheure) = 2022 GROUP by idob having count(idob) > 15;
 -- | idve | idacheteur | montant  |
 -- +------+------------+----------+
 -- | etc...
+
+-- vraie requête 
+ -- Les informations du ou des utilisateurs qui ont mis le plus d’objets en vente.
 -- = Reponse question 5.
 SELECT * FROM UTILISATEUR NATURAL JOIN ENCHERIR GROUP BY idUT
 HAVING COUNT(idUT) >= ALL(select COUNT(idUT) from ENCHERIR GROUP BY idUT);
@@ -157,10 +160,6 @@ FROM VENTE NATURAL JOIN ENCHERIR where idSt = 4 group by idVe;
 --  Les informations du ou des utilisateurs qui ont mis le plus d’OBJETs en VENTE
 
 -- vraie requete 7. Le chiffre d’affaire par mois de la plateforme
-SELECT MONTH(debutve) mois, YEAR(debutve) annee, SUM(montant) chiffre_affaires
-FROM PRIXVENTE natural join VENTE
-GROUP BY annee, mois;
-
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -169,7 +168,9 @@ GROUP BY annee, mois;
 -- +------+----------+------+
 -- | etc...
 -- = Reponse question 7.
-
+SELECT MONTH(debutve) mois, YEAR(debutve) annee, SUM(montant) chiffre_affaires
+FROM PRIXVENTE natural join VENTE
+GROUP BY annee, mois;
 
 
 -- +------------------+--
@@ -186,6 +187,13 @@ GROUP BY annee, mois;
 -- | etc...
 -- = Reponse question 8.
 
+SELECT c.idcat, c.nomcat, COUNT(DISTINCT o.idob) nb_objets_vendus
+FROM CATEGORIE c
+JOIN OBJET o ON c.idcat = o.idcat
+JOIN VENTE v ON o.idob = v.idob
+JOIN PRIXVENTE p ON v.idve = p.idve
+WHERE YEAR(v.debutve) = 2022
+GROUP BY c.idcat, c.nomcat;
 
 
 -- +------------------+--
@@ -193,6 +201,7 @@ GROUP BY annee, mois;
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
 --  Le top des vendeurs
+
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -203,4 +212,14 @@ GROUP BY annee, mois;
 -- = Reponse question 9.
 
 
+SELECT u.pseudout, SUM(pv.montant) chiffre_affaires
+FROM PRIXVENTE pv
+JOIN VENTE v ON pv.idve = v.idve
+JOIN OBJET o ON v.idob = o.idob
+JOIN UTILISATEUR u ON o.idut = u.idut
+WHERE MONTH(finVe) = 01 and YEAR(finVe) = 2023
+GROUP BY u.idut
+ORDER BY chiffre_affaires DESC
+LIMIT 10;
 
+-- ./extraire_donnees.py --login root --serveur mysql -u root -p --bd ENCHERE --requete "SELECT u.pseudout, SUM(pv.montant) chiffre_affaires FROM PRIXVENTE pv JOIN VENTE v ON pv.idve = v.idve JOIN OBJET o ON v.idob = o.idob JOIN UTILISATEUR u ON o.idut = u.idut WHERE MONTH(finVe) = 01 and YEAR(finVe) = 2023 GROUP BY u.idut ORDER BY chiffre_affaires DESC LIMIT 10;" --fic_res le_resultat.csv
