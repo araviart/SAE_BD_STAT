@@ -21,6 +21,7 @@ insert into STATUT(idSt,nomSt) values
 
 -- les utilisateurs
 insert into UTILISATEUR(idUt,pseudoUt,emailUT,mdpUt,activeUt,idRole) values
+	(1001, 'IUTO', "iuto@info.univ-orleans.fr", 'IUTO', 'O', 2)
 	(1,'adm1','adm1@orange.fr','adm1','O',1),
 	(2,'adm2','adm2@orange.fr','adm2','O',1),
 	(3,'adm3','adm3@univ-orleans.fr','adm3','O',1),
@@ -2023,7 +2024,10 @@ Donec facilisis, ligula vel posuere cursus, sapien leo dictum nisi, interdum ali
 	(499,'Marteau rouge','Marteau rougeLorem ipsum dolor sit amet, consectetur adipiscing elit.
 Donec facilisis, ligula vel posuere cursus, sapien leo dictum nisi, interdum aliquam sem nisi ac purus.',4,397),
 	(500,'Tondeuse comme neuve','Tondeuse comme neuveLorem ipsum dolor sit amet, consectetur adipiscing elit.
-Donec facilisis, ligula vel posuere cursus, sapien leo dictum nisi, interdum aliquam sem nisi ac purus.',4,688);
+Donec facilisis, ligula vel posuere cursus, sapien leo dictum nisi, interdum aliquam sem nisi ac purus.',4,688),
+(502,'Clic-Clac très beau et ayant peu servi','Clic clac comme neuveLorem ipsum dolor sit amet, consectetur adipiscing elit.
+Donec facilisis, ligula vel posuere cursus, sapien leo dictum nisi, interdum aliquam sem nisi ac purus', 3, 500);
+
 
 -- les ventes
 insert into VENTE(idVe,prixBase,prixMin,debutVe,finVe,idSt,idOb) values
@@ -2475,7 +2479,8 @@ insert into VENTE(idVe,prixBase,prixMin,debutVe,finVe,idSt,idOb) values
 	(446,7,27,STR_TO_DATE('14/9/2022:10:00:00','%d/%m/%Y:%h:%i:%s'),DATE_ADD(STR_TO_DATE('14/9/2022:10:00:00','%d/%m/%Y:%h:%i:%s'), INTERVAL 1 DAY),4,446),
 	(447,1,79,STR_TO_DATE('20/2/2022:10:00:00','%d/%m/%Y:%h:%i:%s'),DATE_ADD(STR_TO_DATE('20/2/2022:10:00:00','%d/%m/%Y:%h:%i:%s'), INTERVAL 6 DAY),4,447),
 	(448,36,65,STR_TO_DATE('13/11/2022:10:00:00','%d/%m/%Y:%h:%i:%s'),DATE_ADD(STR_TO_DATE('13/11/2022:10:00:00','%d/%m/%Y:%h:%i:%s'), INTERVAL 7 DAY),4,448),
-	(449,91,4,STR_TO_DATE('27/2/2022:10:00:00','%d/%m/%Y:%h:%i:%s'),DATE_ADD(STR_TO_DATE('27/2/2022:10:00:00','%d/%m/%Y:%h:%i:%s'), INTERVAL 2 DAY),4,449);
+	(449,91,4,STR_TO_DATE('27/2/2022:10:00:00','%d/%m/%Y:%h:%i:%s'),DATE_ADD(STR_TO_DATE('27/2/2022:10:00:00','%d/%m/%Y:%h:%i:%s'), INTERVAL 2 DAY),4,449)
+	(450, 40, 80,STR_TO_DATE('23/03/2023:10:00:00','%d/%m/%Y:%h:%i:%s'),DATE_ADD(STR_TO_DATE('30/03/2024:10:00:00','%d/%m/%Y:%h:%i:%s')INTERVAL 0 DAY),2,502);
 
 -- les enchères
 insert into ENCHERIR(idUT,idVe,dateheure,montant) values
