@@ -1,17 +1,8 @@
--- TP 2_04
 -- Nom: RAVIART, Prenom: Alexandre
 
 -- +----------------------+--
 -- * Question OBJET Volé : --
 -- +----------------------+--
-
--- requete a revoir
-
-SELECT OBJET.idut, OBJET.nomob, VENTE.prixbase, MAX(ENCHERIR.montant) montant_max
-FROM OBJET
-JOIN VENTE ON OBJET.idob = VENTE.idob
-JOIN ENCHERIR ON VENTE.idve = ENCHERIR.idve where DAY(debutve) < 15 and VENTE.prixbase < 500
-GROUP BY OBJET.idob, VENTE.prixbase HAVING MAX(ENCHERIR.montant) > VENTE.prixbase * 10;
 
 SELECT ENCHERIR.idut, UTILISATEUR.pseudout, OBJET.nomob, VENTE.prixbase, ENCHERIR.montant
 FROM OBJET
@@ -26,12 +17,14 @@ GROUP BY OBJET.idob, VENTE.prixbase;
 
 -- insertion dans la base de données
 insert into UTILISATEUR(idUt,pseudoUt,emailUT,mdpUt,activeUt,idRole) values
-(1001, 'IUTO', "iuto@info.univ-orleans.fr", 'IUTO', 'O', 2);
+(1002, 'IUTO', "iuto@info.univ-orleans.fr", 'IUTO', 'O', 2);
 insert into OBJET(idOb,nomOb,descriptionOb,idCat,idUt) values
 (502,'Clic-Clac très beau et ayant peu servi','Clic clac comme neuveLorem ipsum dolor sit amet, consectetur adipiscing elit.
-Donec facilisis, ligula vel posuere cursus, sapien leo dictum nisi, interdum aliquam sem nisi ac purus', 3, 1001);
+Donec facilisis, ligula vel posuere cursus, sapien leo dictum nisi, interdum aliquam sem nisi ac purus', 3, 1002);
 insert into VENTE(idVe,prixBase,prixMin,debutVe,finVe,idSt,idOb) values
 (450, 40, 80,STR_TO_DATE('23/03/2023:10:00:00','%d/%m/%Y:%h:%i:%s'),DATE_ADD(STR_TO_DATE('30/03/2024:10:00:00','%d/%m/%Y:%h:%i:%s'), INTERVAL 7 DAY),2,502);
+
+
 -- +------------------+--
 -- * Question 1 :     --
 -- +------------------+--
@@ -74,8 +67,7 @@ NATURAL JOIN OBJET
 WHERE idut IN (
     SELECT idut 
     FROM ENCHERIR 
-    NATURAL JOIN VENTE
-    );
+    NATURAL JOIN VENTE);
 
 -- +------------------+--
 -- * Question 3 :     --
@@ -117,29 +109,16 @@ YEAR(dateheure) = 2022 GROUP by idob having count(idob) > 15;
 -- * Question 5 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
---  Ici NE CREEZ PAS la vue PRIXVENTE mais indiquer simplement la requête qui lui est associée. C'est à dire la requête permettant d'obtenir pour chaque VENTE validée, l'identifiant de la VENTE l'identiant de l'acheteur et le prix de la VENTE.
-
--- Voici le début de ce que vous devez obtenir.
--- ATTENTION à l'ordre des colonnes et leur nom!
--- +------+------------+----------+
--- | idve | idacheteur | montant  |
--- +------+------------+----------+
--- | etc...
-
--- vraie requête 
  -- Les informations du ou des utilisateurs qui ont mis le plus d’objets en vente.
 -- = Reponse question 5.
-SELECT * FROM UTILISATEUR NATURAL JOIN ENCHERIR GROUP BY idUT
-HAVING COUNT(idUT) >= ALL(select COUNT(idUT) from ENCHERIR GROUP BY idUT);
+SELECT idut, pseudoUt, emailUT, mdpUt, idRole FROM UTILISATEUR NATURAL JOIN ENCHERIR GROUP BY idUT
+HAVING COUNT(idUT) >= ALL(select COUNT(idUT) from ENCHERIR GROUP BY idUT); 
 
 -- +------------------+--
 -- * Question 6 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
---  Le chiffre d’affaire par mois de la plateforme (en utilisant la vue PRIXVENTE)
-
---vraie requete : Créer une vue PRIXVENTE permettant d’obtenir pour chaque vente validée, l’identifiant
--- de la vente l’identiant de l’acheteur et le prix de la vente.
+-- Créer une vue PRIXVENTE permettant d’obtenir pour chaque vente validée, l’identifiant de la vente l’identifiant de l’acheteur et le prix de la vente.
 
 
 -- Voici le début de ce que vous devez obtenir.
@@ -157,9 +136,7 @@ FROM VENTE NATURAL JOIN ENCHERIR where idSt = 4 group by idVe;
 -- * Question 7 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
---  Les informations du ou des utilisateurs qui ont mis le plus d’OBJETs en VENTE
-
--- vraie requete 7. Le chiffre d’affaire par mois de la plateforme
+--  Le chiffre d’affaire par mois de la plateforme
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -171,7 +148,6 @@ FROM VENTE NATURAL JOIN ENCHERIR where idSt = 4 group by idVe;
 SELECT MONTH(debutve) mois, YEAR(debutve) annee, SUM(montant) chiffre_affaires
 FROM PRIXVENTE natural join VENTE
 GROUP BY annee, mois;
-
 
 -- +------------------+--
 -- * Question 8 :     --
@@ -195,13 +171,11 @@ JOIN PRIXVENTE p ON v.idve = p.idve
 WHERE YEAR(v.debutve) = 2022
 GROUP BY c.idcat, c.nomcat;
 
-
 -- +------------------+--
 -- * Question 9 :     --
 -- +------------------+--
 -- Ecrire une requête qui renvoie les informations suivantes:
 --  Le top des vendeurs
-
 
 -- Voici le début de ce que vous devez obtenir.
 -- ATTENTION à l'ordre des colonnes et leur nom!
@@ -222,4 +196,12 @@ GROUP BY u.idut
 ORDER BY chiffre_affaires DESC
 LIMIT 10;
 
--- ./extraire_donnees.py --login root --serveur mysql -u root -p --bd ENCHERE --requete "SELECT u.pseudout, SUM(pv.montant) chiffre_affaires FROM PRIXVENTE pv JOIN VENTE v ON pv.idve = v.idve JOIN OBJET o ON v.idob = o.idob JOIN UTILISATEUR u ON o.idut = u.idut WHERE MONTH(finVe) = 01 and YEAR(finVe) = 2023 GROUP BY u.idut ORDER BY chiffre_affaires DESC LIMIT 10;" --fic_res le_resultat.csv
+
+SELECT u.pseudout, SUM(pv.montant) chiffre_affaires
+FROM PRIXVENTE pv
+JOIN VENTE v ON pv.idve = v.idve
+JOIN OBJET o ON v.idob = o.idob
+JOIN UTILISATEUR u ON o.idut = u.idut
+GROUP BY u.idut
+ORDER BY chiffre_affaires DESC
+LIMIT 10;
