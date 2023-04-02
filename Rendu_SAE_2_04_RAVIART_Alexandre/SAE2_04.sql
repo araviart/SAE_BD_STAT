@@ -19,6 +19,17 @@ JOIN VENTE ON OBJET.idob = VENTE.idob
 JOIN ENCHERIR ON VENTE.idve = ENCHERIR.idve
 GROUP BY OBJET.idob, VENTE.prixbase;
 
+
+-- insertion dans la base de données
+insert into UTILISATEUR(idUt,pseudoUt,emailUT,mdpUt,activeUt,idRole) values
+(1002, 'IUTO', "iuto@info.univ-orleans.fr", 'IUTO', 'O', 2);
+insert into OBJET(idOb,nomOb,descriptionOb,idCat,idUt) values
+(502,'Clic-Clac très beau et ayant peu servi','Clic clac comme neuveLorem ipsum dolor sit amet, consectetur adipiscing elit.
+Donec facilisis, ligula vel posuere cursus, sapien leo dictum nisi, interdum aliquam sem nisi ac purus', 3, 1002);
+insert into VENTE(idVe,prixBase,prixMin,debutVe,finVe,idSt,idOb) values
+(450, 40, 80,STR_TO_DATE('23/03/2023:10:00:00','%d/%m/%Y:%h:%i:%s'),DATE_ADD(STR_TO_DATE('30/03/2024:10:00:00','%d/%m/%Y:%h:%i:%s'), INTERVAL 7 DAY),2,502);
+
+
 -- +------------------+--
 -- * Question 1 :     --
 -- +------------------+--
@@ -50,6 +61,9 @@ and MONTH(debutVe) = 2 and YEAR(debutVe) = 2023;
 -- | etc...
 -- = Reponse question 2.
 
+-- a revoir peut causer des problèmes si un utilisateur a mis en vente plusieurs objets et 
+-- que certains d'entre eux ont ete vendus à d'autres utilisateurs, car la requête ne fera pas 
+-- la distinction entre les objets vendus à d'autres utilisateur et ceux vendus à l'utilisateur lui-même.
 
 SELECT DISTINCT pseudout 
 FROM UTILISATEUR 
