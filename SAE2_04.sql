@@ -129,13 +129,7 @@ FROM VENTE NATURAL JOIN ENCHERIR where idSt = 4 group by idVe;
 -- Ecrire une requête qui renvoie les informations suivantes:
 --  Le chiffre d’affaire par mois de la plateforme
 
--- Voici le début de ce que vous devez obtenir.
--- ATTENTION à l'ordre des colonnes et leur nom!
--- +------+----------+------+
--- | idut | pseudout | nbob |
--- +------+----------+------+
--- | etc...
--- = Reponse question 7.
+
 SELECT MONTH(debutve) mois, YEAR(debutve) annee, SUM(montant) chiffre_affaires
 FROM PRIXVENTE natural join VENTE
 GROUP BY annee, mois;
@@ -177,11 +171,11 @@ GROUP BY c.idcat, c.nomcat;
 -- = Reponse question 9.
 
 
-SELECT u.pseudout, SUM(pv.montant) chiffre_affaires
+SELECT u.idut, u.pseudout, SUM(pv.montant) chiffre_affaires
 FROM PRIXVENTE pv
 JOIN VENTE v ON pv.idve = v.idve
 JOIN OBJET o ON v.idob = o.idob
 JOIN UTILISATEUR u ON o.idut = u.idut
 WHERE MONTH(finVe) = 01 and YEAR(finVe) = 2023
 GROUP BY u.idut
-ORDER BY chiffre_affaires DESC;
+ORDER BY chiffre_affaires DESC LIMIT 10;
